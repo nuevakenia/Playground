@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
         if(isGrounded && velocity.y <0)
         {
-            velocity.y = -2f;
+            velocity.y = -2;
         }
 
         float moveZ = Input.GetAxis("Vertical");
@@ -164,6 +164,7 @@ public class PlayerController : MonoBehaviour
     {
 
         velocity.y = Mathf.Sqrt(jumpHeight * -1 * gravity);
+        anim.SetFloat("Speed", 1, 0.1f, Time.deltaTime);
     }
 
 
@@ -216,8 +217,9 @@ public class PlayerController : MonoBehaviour
 
         if (hit.gameObject.CompareTag("Enemigo"))
         {
-            hpPlayer = hpPlayer -25;
-           // Destroy(collision.gameObject);
+            hpPlayer -= 10;
+            Destroy(hit.gameObject);
+
             Debug.Log("Me pegooo");
             UpdateHp();
         }
@@ -239,6 +241,7 @@ public class PlayerController : MonoBehaviour
             //
             Debug.Log("Estas muerto!");
             winText.text = "ESTAS MUERTO";
+            Cursor.lockState = CursorLockMode.Confined;
             bases.IsGameOver = true;
         }
     }
