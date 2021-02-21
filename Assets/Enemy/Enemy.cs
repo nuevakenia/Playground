@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
-    public float hpPlayer;
     public int damage;
     // patruyar
     public Vector3 walkPoint;
@@ -29,15 +28,14 @@ public class Enemy : MonoBehaviour
     public bool playerInSightRange, playerInAttackRange;
 
     // HP
-    public Text txtHp;
     public Text txtWin;
     private void Awake()
     {
         player = GameObject.Find("Jugador").transform;
         agent = GetComponent<NavMeshAgent>();
         damage = 15;
-        hpPlayer = GameObject.Find("Jugador").GetComponent<PlayerController>().hpPlayer;
-        UpdateHp();
+
+        
     }
 
     void Start()
@@ -100,7 +98,10 @@ public class Enemy : MonoBehaviour
             Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
             rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
             rb.AddForce(transform.up * 4f, ForceMode.Impulse);
+            if(rb)
+            {
 
+            }
             alreadyAttacked = true;
 
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
@@ -113,12 +114,6 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void TakeDamageEnemy(int damage)
-    {
-        hpPlayer -= damage;
-        UpdateHp();
-        if (hpPlayer <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
-    }
 
     private void DestroyEnemy()
     {
@@ -133,12 +128,5 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, sightRange);
     }
 
-    void UpdateHp()
-    {
-        txtHp.text = "HP: " + hpPlayer.ToString();
-        if (hpPlayer <= 0)
-        {
-            //
-        }
-    }
+    
 }

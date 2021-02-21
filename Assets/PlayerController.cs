@@ -42,6 +42,9 @@ public class PlayerController : MonoBehaviour
     private const int maxJump = 2;
     public int currentJump = 0;
     public float hpPlayer;
+    public GameObject sys;
+
+    public Bases bases;
 
     void Start()
     {
@@ -61,13 +64,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       /* if(Input.GetKeyDown("space") && (isGrounded || maxJump > currentJump))
+        /* if(Input.GetKeyDown("space") && (isGrounded || maxJump > currentJump))
+         {
+             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+             isGrounded = false;
+             currentJump++;
+         }
+        */
+        if (Input.GetKeyDown(KeyCode.K))
         {
-            rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-            isGrounded = false;
-            currentJump++;
+            bases.IsGameOver = true;
         }
-       */
+
         Move();
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -198,16 +206,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        Debug.Log(collision.collider.name);
+        Debug.Log(hit.collider.name);
         isGrounded = true;
         currentJump = 0;
 
 
-        if (collision.gameObject.CompareTag("Enemigo"))
+        if (hit.gameObject.CompareTag("Enemigo"))
         {
-            hpPlayer -= 25;
+            hpPlayer = hpPlayer -25;
            // Destroy(collision.gameObject);
             Debug.Log("Me pegooo");
             UpdateHp();
@@ -221,7 +230,7 @@ public class PlayerController : MonoBehaviour
        // UpdateHp();
     //    if (hpPlayer <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
     }
-
+    
     void UpdateHp()
     {
         txtHp.text = "HP: " + hpPlayer.ToString();
@@ -230,6 +239,7 @@ public class PlayerController : MonoBehaviour
             //
             Debug.Log("Estas muerto!");
             winText.text = "ESTAS MUERTO";
+            bases.IsGameOver = true;
         }
     }
 }
